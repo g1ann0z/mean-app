@@ -1,0 +1,14 @@
+<mat-card>
+    <mat-form-field> <!-- wrapping di angular/material -->
+        <textarea matInput rows="6" [(ngModel)]="enteredValue"></textarea>
+        <!-- con ngModel e two data binding si cattura il valore di textarea -->
+    </mat-form-field>
+    <button
+        mat-raised-button
+        color="accent"
+        (click)="onAddPost()">Salva Post
+    </button>
+</mat-card>
+
+
+<p>{{ newPost }}</p>
