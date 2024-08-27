@@ -1,8 +1,9 @@
-<mat-accordion>
-    <mat-expansion-panel>
+<mat-accordion multi="true" *ngIf="posts.length > 0"> <!-- multi permette di mantenere aperti i pannelli espansi quando se ne apre un'altro -->
+    <mat-expansion-panel *ngFor="let post of posts">
         <mat-expansion-panel-header>
-            Titolo pannello espansione
+            {{ post.title }}
         </mat-expansion-panel-header>
-        <p>Sono nel pannello espanso</p>
+        <p>{{ post.content }}</p>
     </mat-expansion-panel>
 </mat-accordion>
+<p class="mat-body-1, info-text" *ngIf="posts.length <= 0">Non hai inserito ancora nessun post!</p>

@@ -5,6 +5,14 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
+
 export class AppComponent {
-  title = 'mean-app';
+  /* title = 'mean-app'; */
+
+  storedPosts: any[] = []; //trick per evitare il problema di undefined non essendo eplicitata una interface sulla struttura del post
+
+  onPostAdded(post: any){
+    this.storedPosts.push(post);
+  }
 }
