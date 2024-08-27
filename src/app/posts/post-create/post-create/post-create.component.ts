@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
+import { Post } from '../../post.model';
+
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
@@ -8,11 +10,11 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class PostCreateComponent {
   enteredContent = '';
   enteredTitle = '';
-  @Output() postCreated = new EventEmitter(); //creazione di evento da emettere all'aggiunta di un post da inserire in un array e da passare a post-list
+  @Output() postCreated = new EventEmitter<Post>(); //creazione di evento da emettere all'aggiunta di un post da inserire in un array e da passare a post-list
 
   onAddPost(){
     /* this.newPost = this.enteredContent; */ //trasferisce con 2way bind. il valore di textarea a newpost
-    const post = {
+    const post: Post = {
       title: this.enteredTitle,
       content: this.enteredContent
     }
