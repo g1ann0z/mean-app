@@ -16,6 +16,7 @@ import { HeaderComponent } from './header/header/header.component';
 import { PostListComponent } from './posts/post-list/post-list/post-list.component';
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +37,7 @@ import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansi
     MatExpansionPanel
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent]
 })

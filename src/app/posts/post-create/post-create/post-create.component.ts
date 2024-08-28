@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
-import { Post } from '../../post.model';
+import { PostsService } from '../../posts.service';
+
 
 @Component({
   selector: 'app-post-create',
@@ -10,15 +12,13 @@ import { Post } from '../../post.model';
 export class PostCreateComponent {
   enteredContent = '';
   enteredTitle = '';
-  @Output() postCreated = new EventEmitter<Post>(); //creazione di evento da emettere all'aggiunta di un post da inserire in un array e da passare a post-list
+  
+  constructor(public postsService: PostsService) {}
 
-  onAddPost(){
-    /* this.newPost = this.enteredContent; */ //trasferisce con 2way bind. il valore di textarea a newpost
-    const post: Post = {
-      title: this.enteredTitle,
-      content: this.enteredContent
+  onAddPost(form: NgForm){
+    if (form.invalid){
+      return;
     }
-    this.postCreated.emit(post); //onAddPost crea il post e lo passa come arg a postCreated
-
+    this.postsService.addPost(form.value.title, form.value.content);
   }
 }

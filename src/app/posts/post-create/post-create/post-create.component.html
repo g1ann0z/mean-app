@@ -1,16 +1,40 @@
 <mat-card>
-    <mat-form-field>
-        <input matInput type="text" [(ngModel)]="enteredTitle">
-    </mat-form-field>
-    <mat-form-field> <!-- wrapping di angular/material -->
-        <textarea matInput rows="6" [(ngModel)]="enteredContent"></textarea>
-        <!-- con ngModel e two data binding si cattura il valore di textarea -->
-    </mat-form-field>
-    <button
-        mat-raised-button
-        color="accent"
-        (click)="onAddPost()">Salva Post
-    </button>
+    <form (submit)="onAddPost(postForm)" #postForm="ngForm" >
+        <mat-form-field>
+
+            <input matInput
+                type="text"
+                name="title"
+                ngModel
+                required
+                minlength="3"
+                #title="ngModel"> <!-- id title per mat-error -->
+                <!-- una volta inserito un form, non è più necessario il 2data bind perchè 
+                angular riconosce con un semplice ngModel che si tratta di un form e deve
+                registrare cio che succede, quindi ngModel anziche [(ngModel)]="enteredTitle",
+                va aggiunto title con name qua e content nella textarea - [(ngModel)]="enteredContent"-->
+                <!-- required invece aggiunge il validator html al form -->
+                <mat-error *ngIf="title.invalid">Inserire un titolo per il post.</mat-error>
+                <!-- mat-error, gestione errore titolo non compilato di ang material -->
+        </mat-form-field>
+        <mat-form-field> <!-- wrapping di angular/material -->
+            <textarea matInput
+                rows="4"
+                name="content"
+                ngModel
+                required
+                #content="ngModel"> <!-- id content per mat-error -->
+            </textarea>
+            <mat-error *ngIf="content.invalid">Inserire un contenuto per il post.</mat-error>
+            <!-- mat-error, gestione errore contenuto non compilato di ang material -->
+        </mat-form-field>
+        <button mat-raised-button
+            color="accent"
+            type="submit"
+            >Salva Post
+        </button> <!-- type="submit" di conseguenza rispetto a (click)="onAddPost()" che va su tag form con binding di submit-->
+    </form>
+
 </mat-card>
 
 
