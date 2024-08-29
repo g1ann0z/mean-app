@@ -20,5 +20,6 @@ export class PostCreateComponent {
       return;
     }
     this.postsService.addPost(form.value.title, form.value.content);
+    form.resetForm(); /* ripristina il form dopo l'invio di un post compresa la validità */
   }
 }

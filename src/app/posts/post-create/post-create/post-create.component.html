@@ -8,6 +8,7 @@
                 ngModel
                 required
                 minlength="3"
+                placeholder="Titolo del post..."
                 #title="ngModel"> <!-- id title per mat-error -->
                 <!-- una volta inserito un form, non è più necessario il 2data bind perchè 
                 angular riconosce con un semplice ngModel che si tratta di un form e deve
@@ -23,6 +24,7 @@
                 name="content"
                 ngModel
                 required
+                placeholder="Scrivi qui il contenuto del post..."
                 #content="ngModel"> <!-- id content per mat-error -->
             </textarea>
             <mat-error *ngIf="content.invalid">Inserire un contenuto per il post.</mat-error>
