@@ -23,7 +23,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   constructor(public postsService: PostsService){} //injection del service e grazie alla keyword public si crea in automatico anche la varaibile postsService senza instanziarla manualmente
 
   ngOnInit() {
-    this.posts = this.postsService.getPosts();
+    this.postsService.getPosts(); //carica posts disponibili all'avvio
     this.postsSub = this.postsService.getPostUpdatedListener() //sottoscrizione all'observable creato per monitorare aggiunta di nuovi post
       .subscribe((posts: Post[]) => {
         this.posts = posts;

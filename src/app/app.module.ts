@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card'
 import { MatButtonModule } from '@angular/material/button'
 import {MatToolbarModule} from '@angular/material/toolbar';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -34,7 +35,8 @@ import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansi
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
-    MatExpansionPanel
+    MatExpansionPanel,
+    HttpClientModule
   ],
   providers: [
     provideAnimationsAsync(),
