@@ -1,6 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const mongoose = require('mongoose');   //importazione di mongoose
+const Post = require('./models/post'); //importazione del modello post per mongoose
+
+//connessione db
+mongoose.connect("mongodb+srv://giannozcydia:4zFBSyTD1w0UjhFO@cluster0.a71qy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+.then(() => {
+    console.log('Connesso al database!')
+})
+.catch(() => {
+    console.log('Connessione al database fallita!')
+});
+
+
 const app = express();
 
 app.use(bodyParser.json()); //per la codifica del corpo delle richieste POST
@@ -20,31 +33,25 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/posts", (req, res, next) => {
-    const post = req.body;
-    console.log(post);
+    const post = new Post({         //per database
+        title: req.body.title,
+        content: req.body.content
+    });
+    post.save(); //metodo di salvataggio su db
     res.status(201).json({
         message: "Post aggiunto con successo!"
     });
 });
 
 app.get("/api/posts", (req, res, next) => {
-    const posts = [
-        {
-            id: "dajshda76", 
-            title: "primo post dal server", 
-            content: "ecco il primo contenuto"
-        },
-        {
-            id: "jhkgk565", 
-            title: "second post dal server", 
-            content: "ecco il secondo contenuto"
-        }
-    ];
-    res.status(200).json(
-        {
-            message: 'post caricati con successo',
-            posts: posts
-        });
+    Post.find()  //fetcha i dati dal database
+    .then(documents => {
+        res.status(200).json(
+            {
+                message: 'post caricati con successo',
+                posts: documents
+            });
+    });
 });
 
 module.exports = app;
