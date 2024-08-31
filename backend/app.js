@@ -37,10 +37,15 @@ app.post("/api/posts", (req, res, next) => {
         title: req.body.title,
         content: req.body.content
     });
-    post.save(); //metodo di salvataggio su db
-    res.status(201).json({
-        message: "Post aggiunto con successo!"
-    });
+        post.save().then(createdPost => {   //metodo di salvataggio su db, con then recuperiamo l'oggetto passato ed estraiamo _id
+            res.status(201).json({
+            message: "Post aggiunto con successo!",
+            postId: createdPost._id //passiamo _id a service per poter eliminare il post anche appena inserito
+            /* senza questo passaggio il post si puo eliminare solo se ricarichiamo i dati dal db
+            prima, altrimenti non abbiamo un id da passare poichè quello viene 
+            assegnato dinamicamente dal db */
+        });                         
+    }); 
 });
 
 app.get("/api/posts", (req, res, next) => {
