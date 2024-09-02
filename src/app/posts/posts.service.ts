@@ -4,6 +4,7 @@ import { map } from "rxjs";
 
 import { Post } from "./post.model";
 import { HttpClient } from "@angular/common/http";
+import { response } from "express";
 
 
 @Injectable({providedIn: 'root'})
@@ -35,6 +36,10 @@ export class PostsService {
         return this.postUpdated.asObservable(); //restituisce un oggetto che possiamo ascoltare
     }
 
+    getPost(id: string){
+        return this.http.get<{_id: string, title: string, content: string}>("http://localhost:3000/api/posts/" + id);
+    }
+
     addPost(title: string, content: string){
     const post: Post = { id: null, title: title, content: content };
     this.http.post<{message: string, postId: string}>("http://localhost:3000/api/posts", post)
@@ -46,6 +51,20 @@ export class PostsService {
             this.posts.push(post);
             this.postUpdated.next([...this.posts]); //ogni volta che c'è un nuovo post, aggiorna la copia dell'array
         });
+    }
+
+    updatePost(id: string, title: string, content: string){
+        const post: Post = {id: id, title: title, content: content};
+        this.http
+            .put("http://localhost:3000/api/posts/" + id, post)
+            .subscribe(response => {
+                const updatedPosts = [...this.posts]; //clona array in un'altra variabile
+                const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id); //trova indice del vecchio post
+                updatedPosts[oldPostIndex] = post; //quindi lo aggiorno con post modificato nell'array copia
+                this.posts = updatedPosts; //aggiorno array principale con la modifica
+                this.postUpdated.next([...this.posts]); //aggiorno la copia dell'array principale
+
+            });
     }
 
     deletePost(postId: string){

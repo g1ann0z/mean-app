@@ -27,7 +27,7 @@ app.use((req, res, next) => {
     );
     res.setHeader(                                          //risoluzione CORS per i metodi indicati
         "Access-Control-Allow-Methods",
-        "GET, POST, PATCH, DELETE, OPTIONS"     //OPTIONS viene inviata implicitamente dal browser, fondamentale autorizzarla
+        "GET, POST, PUT, PATCH, DELETE, OPTIONS"     //OPTIONS viene inviata implicitamente dal browser, fondamentale autorizzarla
     );
     next();
 });
@@ -48,7 +48,7 @@ app.post("/api/posts", (req, res, next) => {
     }); 
 });
 
-app.get("/api/posts", (req, res, next) => {
+app.get("/api/posts/", (req, res, next) => {
     Post.find()  //fetcha i dati dal database
     .then(documents => {
         res.status(200).json(
@@ -56,6 +56,27 @@ app.get("/api/posts", (req, res, next) => {
                 message: 'post caricati con successo',
                 posts: documents
             });
+    });
+});
+
+app.get("/api/posts/:id", (req, res, next) => {
+    Post.findById(req.params.id).then(post => {
+        if (post){
+            res.status(200).json(post);
+        } else {
+            res.status(404).json({message: 'Post non trovato!'});
+        }
+    });
+});
+
+app.put("/api/posts/:id", (req, res, next) => {
+    const post = new Post({
+        _id: req.body.id,
+        title: req.body.title,
+        content: req.body.content
+    });
+    Post.updateOne({ _id: req.params.id }, post).then(result => {
+        res.status(200).json({ message: "Modifica effettuata!" });
     });
 });
 

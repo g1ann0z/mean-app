@@ -1,11 +1,11 @@
 <mat-card>
-    <form (submit)="onAddPost(postForm)" #postForm="ngForm" >
+    <form (submit)="onSavePost(postForm)" #postForm="ngForm" >
         <mat-form-field>
-
+            <!-- ngModel wrappato per popolare form in caso di edit -->
             <input matInput
                 type="text"
                 name="title"
-                ngModel
+                [ngModel]="post?.title"
                 required
                 minlength="3"
                 placeholder="Titolo del post..."
@@ -19,10 +19,11 @@
                 <!-- mat-error, gestione errore titolo non compilato di ang material -->
         </mat-form-field>
         <mat-form-field> <!-- wrapping di angular/material -->
+            <!-- ngModel wrappato per popolare form in caso di edit -->
             <textarea matInput
                 rows="4"
                 name="content"
-                ngModel
+                [ngModel]="post?.content"
                 required
                 placeholder="Scrivi qui il contenuto del post..."
                 #content="ngModel"> <!-- id content per mat-error -->
