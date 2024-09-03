@@ -1,36 +1,28 @@
 <mat-card>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
-    <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
+    <form [formGroup]="form" (submit)="onSavePost()" *ngIf="!isLoading">
         <mat-form-field>
-            <!-- ngModel wrappato per popolare form in caso di edit -->
             <input matInput
                 type="text"
-                name="title"
-                [ngModel]="post?.title"
-                required
-                minlength="3"
+                formControlName="title"
                 placeholder="Titolo del post..."
-                #title="ngModel"> <!-- id title per mat-error -->
-                <!-- una volta inserito un form, non è più necessario il 2data bind perchè 
-                angular riconosce con un semplice ngModel che si tratta di un form e deve
-                registrare cio che succede, quindi ngModel anziche [(ngModel)]="enteredTitle",
-                va aggiunto title con name qua e content nella textarea - [(ngModel)]="enteredContent"-->
-                <!-- required invece aggiunge il validator html al form -->
-                <mat-error *ngIf="title.invalid">Inserire un titolo per il post.</mat-error>
-                <!-- mat-error, gestione errore titolo non compilato di ang material -->
+                >
+                <mat-error *ngIf="form.get('title')?.invalid">Inserire un titolo per il post.</mat-error>
         </mat-form-field>
+        <div> <!-- sezione caricamento immagine -->
+            <button mat-stroked-button type="button" (click)="filePicker.click()">Carica Immagine</button>
+            <input type="file" #filePicker (change)="onImagePicked($event)"> <!-- ($any($event.target).value) -->
+        </div>
+        <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+            <img [src]="imagePreview" [alt]="form.value.title">
+        </div>
         <mat-form-field> <!-- wrapping di angular/material -->
-            <!-- ngModel wrappato per popolare form in caso di edit -->
             <textarea matInput
                 rows="4"
-                name="content"
-                [ngModel]="post?.content"
-                required
-                placeholder="Scrivi qui il contenuto del post..."
-                #content="ngModel"> <!-- id content per mat-error -->
+                formControlName="content"
+                placeholder="Scrivi qui il contenuto del post...">
             </textarea>
-            <mat-error *ngIf="content.invalid">Inserire un contenuto per il post.</mat-error>
-            <!-- mat-error, gestione errore contenuto non compilato di ang material -->
+            <mat-error *ngIf="form.get('content')?.invalid">Inserire un contenuto per il post.</mat-error>
         </mat-form-field>
         <button mat-raised-button
             color="accent"
@@ -40,6 +32,3 @@
     </form>
 
 </mat-card>
-
-
-<!-- <p>{{ newPost }}</p> -->
