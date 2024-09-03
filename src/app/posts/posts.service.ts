@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs"; //importazione di subject da rxjs
 import { map } from "rxjs";
+import { Router } from "@angular/router";
 
 import { Post } from "./post.model";
 import { HttpClient } from "@angular/common/http";
@@ -12,7 +13,7 @@ export class PostsService {
     private posts: Post[] = [];
     private postUpdated = new Subject<Post[]>; //creazione di un nuovo oggetto
 
-    constructor(private http: HttpClient ) {}
+    constructor(private http: HttpClient, private router: Router) {}
 
     getPosts(){
        /* return [...this.posts]; */ /* spread operator per copiare in un nuovo array il contenuto di posts e non puntare direttamente a quella reference */
@@ -50,6 +51,7 @@ export class PostsService {
             post.id = id;
             this.posts.push(post);
             this.postUpdated.next([...this.posts]); //ogni volta che c'è un nuovo post, aggiorna la copia dell'array
+            this.router.navigate(["/"]); //redirect in radice
         });
     }
 
@@ -63,7 +65,7 @@ export class PostsService {
                 updatedPosts[oldPostIndex] = post; //quindi lo aggiorno con post modificato nell'array copia
                 this.posts = updatedPosts; //aggiorno array principale con la modifica
                 this.postUpdated.next([...this.posts]); //aggiorno la copia dell'array principale
-
+                this.router.navigate(["/"]); //redirect in radice
             });
     }
 

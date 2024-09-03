@@ -12,14 +12,17 @@ import { Post } from '../../post.model';
 export class PostListComponent implements OnInit, OnDestroy {
 
   posts: Post[] = [];
+  isLoading = false;
   private postsSub!: Subscription;
 
   constructor(public postsService: PostsService){} //injection del service e grazie alla keyword public si crea in automatico anche la varaibile postsService senza instanziarla manualmente
 
   ngOnInit() {
+    this.isLoading = true; //4Spinner
     this.postsService.getPosts(); //carica posts disponibili all'avvio
     this.postsSub = this.postsService.getPostUpdatedListener() //sottoscrizione all'observable creato per monitorare aggiunta di nuovi post
       .subscribe((posts: Post[]) => {
+        this.isLoading = false; //4Spinner
         this.posts = posts;
       });
   }

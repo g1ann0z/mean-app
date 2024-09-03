@@ -1,5 +1,6 @@
 <mat-card>
-    <form (submit)="onSavePost(postForm)" #postForm="ngForm" >
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
         <mat-form-field>
             <!-- ngModel wrappato per popolare form in caso di edit -->
             <input matInput

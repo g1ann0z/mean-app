@@ -1,4 +1,5 @@
-<mat-accordion multi="true" *ngIf="posts.length > 0"> <!-- multi permette di mantenere aperti i pannelli espansi quando se ne apre un'altro -->
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading"> <!-- multi permette di mantenere aperti i pannelli espansi quando se ne apre un'altro -->
     <mat-expansion-panel *ngFor="let post of posts">
         <mat-expansion-panel-header>
             {{ post.title }}
@@ -10,4 +11,4 @@
         </mat-action-row>
     </mat-expansion-panel>
 </mat-accordion>
-<p class="mat-body-1, info-text" *ngIf="posts.length <= 0">Non hai inserito ancora nessun post!</p>
+<p class="mat-body-1, info-text" *ngIf="posts.length <= 0 && !isLoading">Non hai inserito ancora nessun post!</p>
