@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PostsService } from '../../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../../post.model';
+import { mimeType } from './mime-type.validator';
 
 
 @Component({
@@ -28,7 +29,10 @@ export class PostCreateComponent implements OnInit {
     this.form = new FormGroup({ //creazione del reactive form
       'title': new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
       'content': new FormControl(null, {validators: [Validators.required]}),
-      'image': new FormControl(null, {validators: [Validators.required]})
+      'image': new FormControl(null, {
+        validators: [Validators.required], 
+        asyncValidators: [mimeType]
+      })
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => { //4Edit; check su presenza o meno del paramentro id per determinare mode create o edit
       if (paramMap.has('postId')) {
