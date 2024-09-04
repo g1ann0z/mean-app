@@ -1,22 +1,50 @@
 const express = require("express");
+const multer = require("multer"); //package per poter caricare un file sul backend
 
 const Post = require('../models/post'); //importazione del modello post per mongoose
 
-
 const router = express.Router();
 
-router.post("", (req, res, next) => {
+const MIME_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg'
+};
+
+const storage = multer.diskStorage({  //creazione di una costante dove immagazzinare il file immagine
+    destination: (req, file, cb) => { 
+        const isValid = MIME_TYPE_MAP[file.mimetype];
+        let error = new Error("Tipo del file non valido (mime type)!");
+        if (isValid){
+            error = null;
+        }
+        cb(error, "backend/images"); //la callback ha 2 arg, errore e path dove memorizzare il file
+    },
+    filename: (req, file, cb) => {
+        const name = file.originalname.toLowerCase().split(' ').join('-'); //normalize name togliendo spazie e mettendo -
+        const ext = MIME_TYPE_MAP[file.mimetype]; //normalizza estensione file
+        cb(null, name + '-' + Date.now() + '.' + ext);
+    }
+});
+
+router.post("", multer({storage: storage}).single("image"), (req, res, next) => {
+    const url = req.protocol + '://' + req.get("host");
     const post = new Post({         //per database
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imagePath: url + "/images/" + req.file.filename
     });
         post.save().then(createdPost => {   //metodo di salvataggio su db, con then recuperiamo l'oggetto passato ed estraiamo _id
             res.status(201).json({
             message: "Post aggiunto con successo!",
-            postId: createdPost._id //passiamo _id a service per poter eliminare il post anche appena inserito
+            /* postId: createdPost._id */ //passiamo _id a service per poter eliminare il post anche appena inserito
             /* senza questo passaggio il post si puo eliminare solo se ricarichiamo i dati dal db
             prima, altrimenti non abbiamo un id da passare poichè quello viene 
             assegnato dinamicamente dal db */
+            post: { //non restituiamo più solo _id ma tutto l'oggetto js e sovrascriviamo _id
+                ...createdPost, //spread operator
+                id: createdPost._id
+            }
         });                         
     }); 
 });
